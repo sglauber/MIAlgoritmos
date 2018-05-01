@@ -1,43 +1,14 @@
-#include "libraries_headers.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-typedef struct candidateName {
-  char presidentName[30];
-  char governorName[30];
-  char senatorName[30];
-  char stateDeputyName[30];
-  char federalDeputyName[30];
-}candidateName;
-
-typedef struct CandidateNumbers {
-  candidateName voterChoicesNames;
-  int president;
-  int gubernaturial;
-  int stateDept;
-  int federalDept;
-  int senator;
-}voteNumber;
-
-typedef struct VoterDetails {
-  voteNumber voterChoices;
-  int voterID;
-  int sex; //Acess a struct inside
-}VoterDetails;
-
 typedef struct ListNode {
-  Voter VoterDetails;
+  int Content;
   struct ListNode *Next;
 }List;
 
-void addContent(List **Node, Voter *ReceivedDetails) {
+//Function that receives a VoterID and a Node from linked list and adds the received content to the list.
+void addVoterIDToList(List **Node, int *ReceivedVoterID) {
   List *Head;
   Head = (List*) malloc(sizeof(List));
-  if (Head == NULL) {
-    puts("Aloc error.");
-  }
-  Head->VoterDetails = *ReceivedDetails;
+
+  Head->Content = *ReceivedVoterID;
   Head->Next = NULL;
   if (*Node == NULL) {
     *Node = Head;
@@ -45,62 +16,51 @@ void addContent(List **Node, Voter *ReceivedDetails) {
     Head->Next = *Node;
     *Node = Head;
   }
-} //End addContent
+}//End addContent
 
-void bufferWipeOut(int scanValue) { //Receives scanf's return value and cleans the buffer if the return is "false"
+//Function that receives scanf's return and wipes the input buffer if it's "false / '0'".
+void bufferWipeOut(int scanValue) {
   int wipe;
   if (scanValue == 0) {
-    puts("It'll not loop dawg, but I expected an integer :(\n");
     while((wipe = fgetc(stdin)) != EOF && wipe != '\n');
   }
-}
+}//End bufferWipeOut
 
-void printVote(List *calc_list, int *maeli) {
-  int totalPresident = 0, totalGuber = 0;
-  float percentPresident = 1;
-  if (calc_list == NULL) {
-      printf("I'm empty, you should try vote in someone first :)\n");
-  }
-  while(calc_list != NULL) {
-    totalPresident = calc_list->VoterDetails.president + calc_list->Next->VoterDetails.president;
-    percentPresident = (*maeli * 100)/(totalPresident);
-    calc_list = calc_list->Next;
-  }
-  printf("President total votes: %d, for maeli: %.2f\n",totalPresident, percentPresident);
-  printf("Governor total votes: %d\n",totalGuber);
-
-}//End PrintList
-
-void printPresident(List *print_list) {
-  if (print_list == NULL) {
-      printf("I'm empty, you should try vote in someone first :)\n");
-  }
-  while(print_list != NULL) {
-      printf("This dude %d voted in: %s for president.\n",print_list->VoterDetails.voterID, print_list->VoterDetails.presidentName);
-      printf("Currently with: %d votes.\n\n", print_list->VoterDetails.president);
-      print_list = print_list->Next;
-  }
-}//End printPresident
-
-void printGovernor(List *print_list) {
-  if (print_list == NULL) {
-      printf("I'm empty, you should try vote in someone first :)\n");
-  }
-  while(print_list != NULL) {
-    printf("This dude %d voted in: %s.\n", print_list->VoterDetails.voterID, print_list->VoterDetails.guberName);
-    printf("Currently with: %d votes.\n\n", print_list->VoterDetails.gubernaturial);
-    print_list = print_list->Next;
-  }
-}//End printPresident
-
-int voterIDSearch(List **Node, int *number) {
+//Function that receives a linked list and search for it's content in this case the entered VoterID.
+//If this VoterID is already in the list user must type another ID.
+int voterIDSearch(List **Node, int *ReceivedVoterID) {
   List *Search;
   Search = *Node;
   while (Search != NULL) {
-    if (Search->VoterDetails.voterID == *number) {
-      puts("You've already voted. Can't vote again...\n");
+    if (Search->Content == *ReceivedVoterID) {
       return 1;
     }
     Search = Search->Next;
   }
 } //End voterIDSearch
+
+//Function that receives votes from a candidate, and calculate it's percentual based on total of votes from this candidate category.
+void calculateVotesPercentage (int *candidateToCount, int *totalVotesValids, float *candidatePercentage){
+  if (*totalVotesValids == 0) {
+    puts("OMG there's a 0 dude! What u doing to my life?\n");
+  } else {
+    *candidatePercentage = (float)(*candidateToCount * 100)/(*totalVotesValids);
+  }
+}
+
+//Function that receives the quantity of votes from all 3 presidents and calculates if it'll be a second votation.
+void calculateRoundTwo (int firstPresident, int secondPresident, int thirdPresident) {
+  float percentFirstPresident, percentSecondPresident, percentThirdPresident;
+  percentFirstPresident = (float)(firstPresident * 100)/(firstPresident+secondPresident+thirdPresident);
+  percentSecondPresident = (float)(secondPresident * 100)/(firstPresident+secondPresident+thirdPresident);
+  percentThirdPresident = (float)(thirdPresident * 100)/(firstPresident+secondPresident+thirdPresident);
+  if ((percentFirstPresident == 50) && (percentSecondPresident == 50)) {
+    puts("Round TWO! BETWEEEEEEN Mrs. Maeli Gente Boa and Mr. Antonio Brasil\n");
+  } else if ((percentFirstPresident == 50) && (percentThirdPresident == 50)) {
+    puts("Round TWO! BETWEEEEEEN Mrs. Maeli Gente Boa and Mr. Lissandro Progresso\n");
+  } else if ((percentSecondPresident == 50) && (percentThirdPresident == 50)) {
+    puts("Round TWO! BETWEEEEEEN Mr. Antonio Brasil and Mr. Lissandro Progresso\n");
+  } else {
+    puts("We have our winner!\n");
+  }
+}
