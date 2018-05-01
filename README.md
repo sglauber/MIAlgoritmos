@@ -1,4 +1,4 @@
-# MI Algoritmos - Aprendizagem Baseada em Problemas (PBL)
+# MI Algoritmos - Aprendizagem Baseada em Problemas (PBL) ![Status](https://img.shields.io/badge/status-complete-brightgreen.svg)
 `PBL` ou do inglês (Problem Based Learning), significa Aprendizagem Baseada em Problemas, um novo método de ensino que vem ganhando muito espaço entre os educadores – principalmente em faculdades de medicina.
 
 A Aprendizagem Baseada em Problemas PBL  é um recurso didático, uma estratégia pedagógica inovadora, que vem conquistando muitos aliados.
