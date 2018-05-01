@@ -19,6 +19,5 @@ Foi acessado no dia 22 de Abril de 2018.
 Para acessá-lo basta clicar na imagem abaixo. :)
 
 <a href="https://silabe.com.br/blog/aprendizagem-baseada-em-problemas-pbl/"><img src="https://www.silabe.com.br/blog/wp-content/uploads/2015/06/logo-silabe-blog-300x60.png" alt="Drawing" style="width: 100px;"/>
-  
 
-Made with love <3 by [@sglauber](https://github.com/sglauber)
+[Made with love <3 by @sglauber](https://github.com/sglauber)
