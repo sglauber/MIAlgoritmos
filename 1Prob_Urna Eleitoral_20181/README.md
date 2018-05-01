@@ -1,4 +1,4 @@
-# MIAlgoritmos ![Status](https://img.shields.io/badge/status-em%20constru%C3%A7%C3%A3o-orange.svg)
+# MIAlgoritmos ![Status](https://img.shields.io/badge/status-complete-brightgreen.svg)
 
 Desenvolvimento do **Problema 1 - 2018.1 (Urna Eleitoral)** no branch **in_development**
 
