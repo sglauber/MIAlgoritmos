@@ -1,7 +1,8 @@
-#define MAX 30
 #include "functions_headers.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h> //Para operações incluindo strings
+#include <ctype.h> //Quem sabe...
 
 //Testando a implementação de structs com unions {}
 /*O tamanho de uma union é dado pelo tipo que contém o maior
@@ -10,37 +11,42 @@ Sendo assim os membros "restantes" recebem lixo de memória ao seus valores. */
 
 //Elementos onde serão armazenados os conteúdos que compõem a lista encadeada.
 
+tipoCelula *inicializa(tipoCelula *Cabeca, tipoCelula *Cauda){
+  tipoCelula Cabeca = NULL;
+  tipoCelula Cauda = NULL;
+}
+
 tipoCelula *Cabeca = NULL;
 tipoCelula *Cauda = NULL;
 
-//Função que executa a exibição e seleção do menu.
-int menuSelecao() {
+int selecionaMenu() {
   int escolha_menu;
-    printf("Favor selecionar uma opcao");
-    printf("\n[1] Cadastramento\n[2] Ler Arquivo\n[3] Mostrar\n[4] Sair\nOpcao: ");
-    /* Verifica se o valor digitado foi um inteiro através do retorno do scanf();
-     e se a opção digita está dentro do padrão estabelecido. */
-    while((scanf("%d",&escolha_menu) != 1) || (escolha_menu < 1 ) || (escolha_menu > 4)) {
-      setbuf(stdin,NULL);
-      printf("Selecao invalida. Digite novamente por favor.\n\n");
-      printf("Qual sua escolha?: ");
-    }
+  printf("Favor selecionar uma opcao");
+  printf("\n[1] Cadastramento\n[2] Ler Arquivo\n[3] Mostrar\n[4] Sair\nOpcao: ");
+  /* Verifica se o valor digitado foi um inteiro através do retorno do scanf();
+  e se a opção digita está dentro do padrão de escolhas estabelecido. */
+  while((scanf("%d",&escolha_menu) != 1) || (escolha_menu < 1 ) || (escolha_menu > 4)) {
+    setbuf(stdin,NULL);
+    CLEAR;
+    printf("Selecao invalida. Digite novamente por favor.\n\n");
+    printf("Qual sua escolha?: ");
+  }
   switch(escolha_menu) {
     case 1:
-      cadastraProposta();
+      selecionaOpcaoCadastro(); //Cadastramento, podendo ser as equipes ou notas... sei lá. mas precisa adicionar as categorias.
       break;
     case 2:
       lerArquivo();
       break;
     case 3:
-      mostrarLista();
+      exibirLista(); //Exibir (); Chama funções que exibem as equipes, funções que exibem as notas.
       break;
     default:
-      exit(1);
+      exit(EXIT_SUCCESS);
   }
-} //Fim de menuSelecao();
+} //Fim selecionaMenu();
 
-tipoCelula *criaCelula(tipoConteudo Conteudo) {
+tipoCelula* criaCelula(tipoConteudo Conteudo) {
   tipoCelula *Novo = malloc(sizeof(tipoCelula));
   Novo->Conteudo = Conteudo;
   Novo->Anterior = NULL;
@@ -48,9 +54,28 @@ tipoCelula *criaCelula(tipoConteudo Conteudo) {
   return (Novo);
 } //Fim de *criaCelula();
 
-void cadastraProposta() {
-  tipoConteudo codigo = lerCadastro();
-  tipoCelula *Novo = criaCelula(codigo);
+void selecionaOpcaoCadastro() {
+  int seleciona_cadastro;
+  printf("O que voce deseja cadastrar?\n[1] Equipe\n[2] Projeto\nOpcao: ");
+  scanf("%d",&seleciona_cadastro);
+  switch (seleciona_cadastro) {
+    case 1:
+      cadastraEquipe();
+      break;
+    case 2:
+      cadastraProjeto();
+      break;
+  }
+}
+
+void cadastraEquipe() {
+
+}
+
+void cadastraProjeto() {
+  tipoConteudo Conteudo = lerCadastro();
+  tipoCelula *Novo = criaCelula(Conteudo);
+
   if (Cabeca == NULL) {
     Cabeca = Novo;
     Cauda = Cabeca;
@@ -59,9 +84,9 @@ void cadastraProposta() {
     Cauda->Proximo = Novo;
     Cauda = Novo;
   }
-}
+} //Fim cadastrarProposta();
 
-tipoCelula* PercorrerLista(tipoCelula* Percorrer, int count) {
+tipoCelula* percorrerLista(tipoCelula* Percorrer, int count) {
     while(count > 0 && Percorrer != NULL) {
       // printf ("count:%d value:%d", count, Percorrer->data.iValue);
       Percorrer = Percorrer->Proximo;
@@ -69,9 +94,9 @@ tipoCelula* PercorrerLista(tipoCelula* Percorrer, int count) {
     }
     // printf ("Returning Percorrer: %p", Percorrer);
     return Percorrer;
-} //Fim de cadastraProposta();
+} //Fim de PercorrerLista();
 
-tipoConteudo lerCadastro() {
+tipoConteudo lerCadastro()  {
   tipoConteudo Projeto;
   system("clear");
   printf("Digite um codigo para o seu projeto: ");
@@ -86,7 +111,7 @@ tipoConteudo lerCadastro() {
 caso o tamanho da string ultrapasse o tamanho do vetor então essa função deverá ser chamada.
 void alocaVetor {} */
 
-void mostrarLista(){
+void exibirLista()  {
   tipoCelula  *Percorrer = Cabeca;
   // printf ("Inside display...%p\n", Percorrer);
   if (Percorrer == NULL) {
@@ -98,7 +123,7 @@ void mostrarLista(){
       Percorrer = Percorrer->Proximo;
     }
   }
-}
+} //Fim de mostrarLista();
 
 int buscaPorCodigo(tipoCelula **Celula, int *codigo) {
   tipoCelula *Percorrer;
@@ -107,17 +132,20 @@ int buscaPorCodigo(tipoCelula **Celula, int *codigo) {
     return Percorrer->Conteudo.codigo_projeto == *codigo ? 1 : 0;
   }
   Percorrer = Percorrer->Proximo;
-} //End buscaPorCodigo();
+} //Fim de buscaPorCodigo();
 
-void criaArquivo(){
-  FILE *file = fopen("arquivo","w");
+FILE *abreArquivo(char *nome_arquivo){
+  FILE *file  = fopen(nome_arquivo,"a+b");
   if (file == NULL){
-    perror("open()");
-  } else {
-    fclose(file);
+    printf("Errro!");
   }
-} //Fim de criaArquivo();
+  return file;
+} //Fim de abreArquivo();
 
 void lerArquivo() {
-
-}
+  char nome_arquivo[MAX];
+  puts("\nDigite o nome do arquivo de texto.\n");
+  fgets(nome_arquivo,BUFSIZ,stdin);
+  strcat(nome_arquivo,".txt") //Concatenando a extensão ao nome do arquivo de texto.
+  //abreArquivo(nome_arquivo);
+} //Fim de lerArquivo();
