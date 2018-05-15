@@ -6,15 +6,8 @@
 #else //In any other OS
   #define CLEAR system("clear");
 #endif
-#define MAX 20
+#define MAX 256
 #include <stdio.h>
-
-typedef struct Projeto {
-  char nome_projeto[MAX];
-  int  codigo_projeto;
-  int notas_jurados[5][5];
-  char categoria_projeto[MAX];
-}tipoProjeto;
 
 /*  As notas compreendem valores de 0 a 10. Cada coluna do vetor irá corresponder a uma nota (critério do jurado) e cada linha corresponde a um jurado.
     Nível de Organização da Equipe na posição [0]
@@ -24,40 +17,48 @@ typedef struct Projeto {
     Grau de inovação do produto [4] */
 
 typedef struct Equipes {
-  tipoProjeto equipeProjeto;
   char nome_equipe[MAX];
   char nome_participante[MAX];
-}tipoEquipe;
+}equipe_t;
 
-typedef struct Conteudo {
-  tipoEquipe Equipe;
-  tipoProjeto Projeto;
-}tipoConteudo;
+typedef struct Projeto {
+  equipe_t equipe;
+  char titulo[MAX];
+  int codigo_projeto;
+  int tipo_projeto; //Categorias
+  char pnome_categoria[15];
+}projeto_t;
+
+typedef struct ConteudoApresentacao {
+  projeto_t projeto;
+  int contador_gestao[2], contador_educacao[2], contador_psocial[2];
+}conteudo_t;
 
 /* Célula da lista
 Os ponteiros são utilizados para "andar"
 em ambas as direções através da lista,
 informando 'de onde' e 'para onde' estamos nos movendo. */
-typedef struct Lista {
-  tipoConteudo Conteudo;
-  struct Lista *Proximo;
-  struct Lista *Anterior;
-}tipoCelula;
+typedef struct Celula {
+  conteudo_t    *conteudo;
+  struct Celula *Proximo;
+  struct Celula *Anterior;
+}celula_t;
 
-int selecionaMenu();
-tipoCelula *criaCelula(tipoProjeto Projeto);
-void selecionaOpcaoCadastro();
-void cadastraEquipe();
-tipoEquipe lerEquipe();
-void cadastraProjeto();
-tipoProjeto lerProjeto();
-tipoCelula* PercorrerLista(tipoCelula* Percorrer, int count);
-tipoProjeto lerCadastro();
-void validaCategoria();
-int escolheCategoria();
-int validaCodigo();
-void exibirLista();
-int buscaPorCodigo(tipoProjeto CodeFind);
-FILE *abreArquivo(char *nome_arquivo);
+void selecionaMenu();
+void zerarStruct();
+celula_t* criarCelula();
+void criarLista();
+void selecionarOpcaoCadastro();
+void cadastrarEquipes();
+void escolherCadastramento();
+void exibirCategorias();
+void cadastrarProjetos();
+void copiarParaVetor();
+int escolherCategoria();
+int validarCodigo();
+void ingressarProjeto();
+void exibirProjetos();
+FILE *abreArquivo();
 void lerArquivo();
- #endif
+celula_t* percorrerLista();
+#endif
