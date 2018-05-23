@@ -11,33 +11,6 @@ Sendo assim os membros "restantes" recebem lixo de memória ao seus valores. */
 
 //Elementos onde serão armazenados os conteúdos que compõem a lista encadeada.
 
-void selecionaMenu(projeto_t *projeto, celula_t **Cabeca, celula_t **Cauda) {
-  int escolha_menu;
-  printf("Favor selecionar uma opcao");
-  printf("\n[1] Cadastramento\n[2] Ler Arquivo\n[3] Mostrar\n[4] Sair\nOpcao: ");
-  /* Verifica se o valor digitado foi um inteiro através do retorno do scanf();
-  e se a opção digita está dentro do padrão de escolhas estabelecido. */
-  while((scanf("%d",&escolha_menu) != 1) || (escolha_menu < 1 ) || (escolha_menu > 4)) {
-    setbuf(stdin,NULL);
-    CLEAR;
-    printf("Selecao invalida. Digite novamente por favor.\n\n");
-    printf("Qual sua escolha?: ");
-  }
-  switch(escolha_menu) {
-    case 1:
-      selecionarOpcaoCadastro(projeto); //Cadastramento, podendo ser as equipes ou notas... sei lá. mas precisa adicionar as categorias.
-      break;
-    case 2:
-      lerArquivo();
-      break;
-    case 3:
-      exibirProjetos(Cabeca); //Exibir(); Chama funções que exibem as equipes, funções que exibem as notas.
-      break;
-    default:
-      exit(EXIT_SUCCESS);
-  }
-}
-
 // Inicializando contadores;
 void zerarStruct(conteudo_t *conteudo) {
   for (int i = 0; i < 2; i++) {
@@ -47,74 +20,75 @@ void zerarStruct(conteudo_t *conteudo) {
   }
 }
 
-celula_t* criarCelula(projeto_t *projeto) {
-  celula_t *Novo = malloc(sizeof(celula_t));
-  Novo->conteudo->projeto = *projeto;
-  Novo->Anterior = NULL;
-  Novo->Proximo  = NULL;
+celula_t *criarCelula() {
+  celula_t  *Novo;
+  Novo = (celula_t*) malloc(sizeof(celula_t));
+  Novo->conteudo = NULL;
+  Novo->proximo  = NULL;
   return (Novo);
-} //Fim de *criaCelula();
+} //Fim de *criarCelula();
 
-void criarLista(projeto_t *projeto) {
-  celula_t *Cabeca = NULL;
-  celula_t *Cauda = NULL;
-  celula_t *Novo = criarCelula(projeto);
-  if (Cabeca == NULL) {
-    Cabeca = Novo;
-    Cauda = Cabeca;
-  }
-  else {
-    Novo->Anterior = Cabeca;
-    Cauda->Proximo = Novo;
-    Cauda = Novo;
+void criarLista(projeto_t *projeto, celula_t *inovacao) {
+  celula_t *novo = criarCelula();
+  if (inovacao == NULL) {
+    inovacao = novo;
+  } else {
+    novo->proximo = inovacao;
+    novo = inovacao;
   }
 }
 
-void selecionarOpcaoCadastro(projeto_t *projeto) {
+void selecionarOpcaoCadastro(conteudo_t *apresentacao, celula_t **inovacao) {
   int seleciona_cadastro;
+  int var_controle = 0;
   CLEAR;
-  printf("O que voce deseja cadastrar?\n[1] Equipe\n[2] Projeto\nOpcao: ");
+  printf("O que voce deseja cadastrar?\n[1] Projeto\n[2] Equipe\nOpcao: ");
   //printf("Equipes podem ser cadastradas em mais de um projeto :)");
+  verificarSituacao(&var_controle);
   scanf("%d",&seleciona_cadastro);
   setbuf(stdin,NULL);
   switch (seleciona_cadastro) {
     case 1:
-      cadastrarEquipes(projeto);
+      cadastrarProjetos(apresentacao, inovacao);
       break;
     case 2:
-      cadastrarProjetos(projeto);
+      cadastrarEquipes(apresentacao, inovacao);
       break;
   }
 }
 
-void cadastrarEquipes(projeto_t *equipe) {
-  printf("\nDe um nome a sua equipe: ");
-  fgets(equipe->equipe.nome_equipe,MAX,stdin);
+void cadastrarEquipes(conteudo_t *conteudo, celula_t **inovacao) {
+  printf("\nDê um nome a sua equipe: ");
+  fgets(conteudo->projeto.equipe.nome_equipe,MAX,stdin);
   setbuf(stdin,NULL);
   printf("\nInforme o nome de um participantes: ");
-  fgets(equipe->equipe.nome_participante,MAX,stdin);
+  fgets(conteudo->projeto.equipe.nome_participante,MAX,stdin);
   setbuf(stdin,NULL);
   CLEAR;
-  escolherCadastramento(equipe);
+  escolherCadastramento(conteudo, inovacao);
 }
 
-void escolherCadastramento(projeto_t *equipe) {
+void escolherCadastramento(conteudo_t *conteudo, celula_t **inovacao) {
   int choice;
   printf("Olá! O que você deseja fazer? Você e sua equipe podem:\n");
-  printf("[1] Cadastrar um novo projeto\n[2] Ingressar em um já projeto existente\nOpcao: ");
+  printf("[1] Cadastrar um novo projeto\n[2] Ingressar em um projeto já existente\nOpcao: ");
   scanf("%d",&choice);
    //recebe char como args verificando se a opção está correta
    switch(choice){
     case 1:
-      exibirCategorias(equipe);
+      exibirCategorias(conteudo, inovacao);
       break;
     case 2:
-      ingressarProjeto();
+      ingressarProjeto(conteudo, inovacao);
       break;
   }
 }
 
-void exibirCategorias(projeto_t *projeto) {
+void verificarSituacao(int *controle) {
+  //Esta função recebe como parâmetro uma variável de controle e modifica o seu valor se esta for 0;
+}
+
+void exibirCategorias(conteudo_t *conteudo, celula_t **inovacao) {
   char nome_categoria[][15] = {
     "Gestao",
     "Educacao",
@@ -122,20 +96,19 @@ void exibirCategorias(projeto_t *projeto) {
   };
   printf("Escolha uma categoria para o seu projeto: ");
   int categoria_escolhida = escolherCategoria(nome_categoria, 3);
-  copiarParaVetor(nome_categoria, categoria_escolhida, projeto->pnome_categoria);
+  copiarParaVetor(nome_categoria, categoria_escolhida, conteudo->projeto.pnome_categoria);
   CLEAR;
-  cadastrarProjetos(projeto);
+  cadastrarProjetos(conteudo, &inovacao);
 } //Fim de cadastrarProjeto();
 
-void cadastrarProjetos(projeto_t *projeto){
+void cadastrarProjetos(conteudo_t *conteudo, celula_t *inovacao){
   printf("Hey! você pode me informar um código para o seu projeto? :): ");
-  scanf("%d",&projeto->codigo_projeto);
+  scanf("%d",&conteudo->projeto.codigo_projeto);
   setbuf(stdin,NULL);
   //validaCodigo(projeto.codigo_projeto);
   printf("\nVocê também pode dar um nome bacana pra ele, que tal?: ");
-  fgets(projeto->titulo,BUFSIZ,stdin);
+  fgets(conteudo->projeto.titulo_projeto,BUFSIZ,stdin);
   setbuf(stdin,NULL);
-  criarLista(projeto);
 }
 
 /*  Função que copia o nome de uma categoria selecionada para a estrutura.
@@ -148,7 +121,7 @@ void copiarParaVetor(char nome_categoria[][15], int posicao, char *categoria_pro
 int escolherCategoria(char nome_categoria[][15], int tam) {
   int escolha_categoria;
   CLEAR;
-  for (int i = 0; i < tam; i++){
+  for (int i = 0; i < tam; i++) {
     printf("\n[%d]-%s",i+1,nome_categoria[i]);
   }
   printf("\nOpção: ");
@@ -161,45 +134,45 @@ int escolherCategoria(char nome_categoria[][15], int tam) {
   return escolha_categoria;
 }
 
-int validarCodigo(celula_t *Lista, int numero_procurado) {
-  celula_t *Percorrer = Lista;
-  if (Percorrer != NULL) {
-    while(Percorrer != NULL){
-      return Percorrer->conteudo->projeto.codigo_projeto == numero_procurado ? 1 : 0;
+int validarCodigo(celula_t *inovacao, int numero_procurado) {
+  celula_t *percorrer = inovacao;
+  if (percorrer != NULL) {
+    while(percorrer != NULL) {
+      return percorrer->conteudo->projeto.codigo_projeto == numero_procurado ? 1 : 0;
     }
-    Percorrer = Percorrer->Proximo;
+    percorrer = percorrer->proximo;
   }
+  return 1;
 }
 
 /*  Essa função será utilizada para alocar dinamicamente um vetor para uma string
 caso o tamanho da string ultrapasse o tamanho do vetor então essa função deverá ser chamada.
 void alocaVetor {} */
 
-void ingressarProjeto() {
+void ingressarProjeto(conteudo_t *conteudo, celula_t **inovacao) {
   int choice;
-  printf("Acho que temos alguns projetos legais, para selecionar um de seu interesse, digite o número correspondente ao código dele :)");
-  //exibirProjetos(Celula);
-  while((scanf("%d", &choice) != 1 || choice < 1 || choice > 2)) {
+  exibirProjetos(inovacao);
+  while ((scanf("%d", &choice) != 1 || choice < 1 || choice > 2)) {
     printf("Selecao invalida. Digite novamente por favor.\n\n");
     printf("Podemos tentar de novo? Qual projeto deseja selecionar?: ");
   }
+  //jogarEquipeNoProjetoDesejado(equipe, codigo_projeto, inovacao);
 }
 
-
-void exibirProjetos(celula_t **Celula) {
-  celula_t  *Percorrer = *Celula;
-  // printf ("Inside display...%p\n", Percorrer);
-  if (Percorrer == NULL) {
-    printf("\nA lista esta vazia.\n");
+void exibirProjetos(celula_t **lista) {
+  celula_t *percorrer = *lista;
+  if (percorrer == NULL) {
+    printf("\nNenhum projeto foi adicionado a lista ainda. Deseja cadastrar um novo ? :)\n");
   } else {
-    while(Percorrer != NULL){
-      printf("\nCodigo do projeto: %d",Percorrer->conteudo->projeto.codigo_projeto);
-      printf("\nNome do projeto: %s", Percorrer->conteudo->projeto.titulo);
-      printf("Equipes Participantes");
-      Percorrer = Percorrer->Proximo;
-    }
+    printf("Acho que temos alguns projetos legais, para selecionar um de seu interesse, digite o número correspondente ao código dele :)\n");
   }
-} //Fim de mostrarLista();
+  while(percorrer != NULL){
+    printf("\nCodigo do projeto: %d", percorrer->conteudo->projeto.codigo_projeto);
+    printf("\nNome do projeto: %s", percorrer->conteudo->projeto.titulo_projeto);
+    printf("Equipes Participantes");
+    percorrer = percorrer->proximo;
+  }
+} //Fim de exibirProjetos();
 
 FILE *abreArquivo(char *nome_arquivo) {
   FILE *file  = fopen(nome_arquivo,"a+b");
@@ -218,12 +191,12 @@ void lerArquivo() {
   //abreArquivo(nome_arquivo);
 } //Fim de lerArquivo();
 
-celula_t* percorrerLista(celula_t* Percorrer, int count) {
-    while(count > 0 && Percorrer != NULL) {
-      // printf ("count:%d value:%d", count, Percorrer->data.iValue);
-      Percorrer = Percorrer->Proximo;
+celula_t* percorrerLista(celula_t* percorrer, int count) {
+    while(count > 0 && percorrer != NULL) {
+      // printf ("count:%d value:%d", count, percorrer->data.iValue);
+      percorrer = percorrer->proximo;
       count--;
     }
-    // printf ("Returning Percorrer: %p", Percorrer);
-    return Percorrer;
+    // printf ("Returning percorrer: %p", percorrer);
+    return percorrer;
 } //Fim de PercorrerLista();

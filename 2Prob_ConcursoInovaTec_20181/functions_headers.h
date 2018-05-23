@@ -1,5 +1,5 @@
 #ifndef FUNCTIONS_HEADERS_H
-#define FUNCTIONS_HEADER_H
+#define FUNCTIONS_HEADERS_H
 
 #ifdef _WIN32 //Se for Windows ambas arquiteturas x86 e x64
   #define CLEAR system("cls");
@@ -16,49 +16,53 @@
     Nível de maturidade da área que pretendem atuar [3];
     Grau de inovação do produto [4] */
 
-typedef struct Equipes {
+typedef struct equipes {
   char nome_equipe[MAX];
   char nome_participante[MAX];
 }equipe_t;
 
-typedef struct Projeto {
+typedef struct projeto {
   equipe_t equipe;
-  char titulo[MAX];
+  char titulo_projeto[MAX];
   int codigo_projeto;
   int tipo_projeto; //Categorias
   char pnome_categoria[15];
 }projeto_t;
 
-typedef struct ConteudoApresentacao {
+typedef struct conteudoApresentacao {
   projeto_t projeto;
-  int contador_gestao[2], contador_educacao[2], contador_psocial[2];
+  int contador_gestao[2], contador_educacao[2], contador_psocial[2], verificador;
 }conteudo_t;
 
 /* Célula da lista
 Os ponteiros são utilizados para "andar"
 em ambas as direções através da lista,
 informando 'de onde' e 'para onde' estamos nos movendo. */
-typedef struct Celula {
+typedef struct celula {
   conteudo_t    *conteudo;
-  struct Celula *Proximo;
-  struct Celula *Anterior;
+  struct celula *proximo;
+//  struct Celula *Anterior;
 }celula_t;
 
+void exibirMenu();
 void selecionaMenu();
 void zerarStruct();
 celula_t* criarCelula();
 void criarLista();
+int retornaEscolha(int opcaoMin, int opcaoMax);
 void selecionarOpcaoCadastro();
 void cadastrarEquipes();
+void verificarSituacao(int *controle);
 void escolherCadastramento();
 void exibirCategorias();
 void cadastrarProjetos();
-void copiarParaVetor();
-int escolherCategoria();
+void copiarParaVetor(char nome_categoria[][15], int posicao, char *categoria_projeto);
+int escolherCategoria(char nome_categoria[][15], int tam);
 int validarCodigo();
 void ingressarProjeto();
 void exibirProjetos();
 FILE *abreArquivo();
 void lerArquivo();
 celula_t* percorrerLista();
+
 #endif
