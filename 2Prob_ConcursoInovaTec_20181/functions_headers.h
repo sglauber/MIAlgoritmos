@@ -9,7 +9,8 @@
 #define MAX 256
 #include <stdio.h>
 
-/*  As notas compreendem valores de 0 a 10. Cada coluna do vetor irá corresponder a uma nota (critério do jurado) e cada linha corresponde a um jurado.
+/*  As notas compreendem valores de 0 a 10. Cada coluna do vetor irá
+    corresponder a uma nota (critério do jurado) e cada linha corresponde a um jurado.
     Nível de Organização da Equipe na posição [0]
     Estratégia de Venda [1]
     Grau de usabilidade do produto [2]
@@ -17,6 +18,7 @@
     Grau de inovação do produto [4] */
 
 typedef struct equipes {
+  int equipe_id;
   char nome_equipe[MAX];
   char nome_participante[MAX];
 }equipe_t;
@@ -30,8 +32,9 @@ typedef struct projeto {
 }projeto_t;
 
 typedef struct conteudoApresentacao {
+  equipe_t equipeTeste;
   projeto_t projeto;
-  int contador_gestao[2], contador_educacao[2], contador_psocial[2], verificador;
+  int contador_gestao, contador_educacao, contador_psocial;
 }conteudo_t;
 
 /* Célula da lista
@@ -51,16 +54,18 @@ void criarLista();
 int retornaEscolha();
 void selecionarOpcaoCadastro();
 void cadastrarEquipes();
-void verificarSituacao(int *controle);
+int cadastrosDisponiveis(conteudo_t *equipe);
 void escolherCadastramento();
 void exibirCategorias();
 void cadastrarProjetos();
 void colocarNaLista();
-void copiarParaVetor(char nome_categoria[][15], int posicao, char *categoria_projeto);
-int escolherCategoria(char nome_categoria[][15], int tam);
+void copiarAspectosDoProjeto();
+void incrementarQuantidadeCategorias();
+int escolherCategoria();
 int validarCodigo();
 void ingressarProjeto();
 void exibirProjetos();
+void recolherNotas();
 FILE *abreArquivo();
 void lerArquivo();
 celula_t* percorrerLista();
