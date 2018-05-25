@@ -44,18 +44,18 @@ typedef struct celula {
 //  struct Celula *Anterior;
 }celula_t;
 
-void exibirMenu();
 void selecionaMenu();
 void zerarStruct();
 celula_t* criarCelula();
 void criarLista();
-int retornaEscolha(int opcaoMin, int opcaoMax);
+int retornaEscolha();
 void selecionarOpcaoCadastro();
 void cadastrarEquipes();
 void verificarSituacao(int *controle);
 void escolherCadastramento();
 void exibirCategorias();
 void cadastrarProjetos();
+void colocarNaLista();
 void copiarParaVetor(char nome_categoria[][15], int posicao, char *categoria_projeto);
 int escolherCategoria(char nome_categoria[][15], int tam);
 int validarCodigo();
