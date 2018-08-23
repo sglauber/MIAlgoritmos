@@ -1,7 +1,5 @@
 # MIAlgoritmos ![Status](https://img.shields.io/badge/status-complete-brightgreen.svg)
 
-Desenvolvimento do **Problema 1 - 2018.1 (Urna Eleitoral)** no branch **in_development**
-
 O sistema deve receber uma quantidade de votos não definida, cada eleitor deverá ter a opção de votar em um:
 
 * Presidente
