@@ -18,14 +18,6 @@ void addVoterIDToList(List **Node, int *ReceivedVoterID) {
   }
 }//End addContent
 
-//Function that receives scanf's return and wipes the input buffer if it's "false / '0'".
-void bufferWipeOut(int scanValue) {
-  int wipe;
-  if (scanValue == 0) {
-    while((wipe = fgetc(stdin)) != EOF && wipe != '\n');
-  }
-}//End bufferWipeOut
-
 //Function that receives a linked list and search for it's content in this case the entered VoterID.
 //If this VoterID is already in the list user must type another ID.
 int voterIDSearch(List **Node, int *ReceivedVoterID) {

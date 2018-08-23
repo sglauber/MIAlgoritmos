@@ -21,7 +21,6 @@ do código, e estou ciente que estes trechos não serão considerados para fins 
 #include "functions.h"
 
 void addVoterIDToList(List **Node, int *ReceivedVoterID);
-void bufferWipeOut(int scanValue);
 int voterIDSearch(List **Node, int *ReceivedVoterID);
 void calculateVotesPercentage (int *presidentToCount, int *totalPresidentVotesValids, float *candidatePercentage);
 void calculateRoundTwo();
@@ -49,7 +48,7 @@ int main() {
     scanValue = scanf("%d", &menuOption);
     //This function receives a scanf() return value that's stored on scanValue and wipes the stdin buffer if this return is EOF, false/'0'.
     CLEAR;
-    bufferWipeOut(scanValue);
+    setbuf(stdin,NULL)(scanValue);
     if (menuOption == 1) {
       if (voteAgain == 1) {
         do{
@@ -57,7 +56,7 @@ int main() {
             puts("Enter your Voter ID card. 4 Digits.\n");
             scanValue = scanf("%d", &VoterID);
             CLEAR;
-            bufferWipeOut(scanValue);
+            setbuf(stdin,NULL)(scanValue);
             if (activateSearch == 1) {
               //Function that receives my LinkedList as parameter and searchs for a VoterID on the List. If it returns 1 means that the ID have been used to vote.
               //Knowing that if the VoterID exists this persons can't vote with this ID.
@@ -102,7 +101,7 @@ int main() {
             nullPresidentVoteCounter++;
           }
           CLEAR;
-          bufferWipeOut(scanValue);
+          setbuf(stdin,NULL)(scanValue);
         }while((scanValue == 0));
         //President voting block end...
 
@@ -131,7 +130,7 @@ int main() {
             nullGovernorVoteCounter++;
           }
           CLEAR;
-          bufferWipeOut(scanValue);
+          setbuf(stdin,NULL)(scanValue);
         }while((scanValue == 0));
         //Governor voting block end...
 
@@ -156,7 +155,7 @@ int main() {
             nullSenatorVoteCounter++;
           }
           CLEAR;
-          bufferWipeOut(scanValue);
+          setbuf(stdin,NULL)(scanValue);
         }while((scanValue == 0));
         //Senator voting block end...
 
@@ -181,7 +180,7 @@ int main() {
             nullFederalDeputyVoteCounter++;
           }
           CLEAR;
-          bufferWipeOut(scanValue);
+          setbuf(stdin,NULL)(scanValue);
         }while((scanValue == 0));
         //Federal Deputy voting block end...
 
@@ -210,7 +209,7 @@ int main() {
             nullStateDeputyVoteCounter++;
           }
           CLEAR;
-          bufferWipeOut(scanValue);
+          setbuf(stdin,NULL)(scanValue);
         }while((scanValue == 0));
         //State Deputy voting block end...
 
@@ -223,7 +222,7 @@ int main() {
         printf("State Deputy choice: %s\nFederal Deputy choice: %s\n\n", stateDeputyName, federalDeputyName);
         puts("Do you want to vote again? [1] YES [Any Other] NO \n");
         scanValue = scanf("%d",&voteAgain);
-        bufferWipeOut(scanValue);
+        setbuf(stdin,NULL)(scanValue);
         CLEAR;
       } else
         puts("Votes already ended.\n");
