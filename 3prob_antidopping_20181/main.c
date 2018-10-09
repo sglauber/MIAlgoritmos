@@ -8,11 +8,15 @@
 #endif
 #define MAX 32
 
-#include <stdbool.h>
+#define true 1
+#define false 0
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <time.h>
+
+typedef int bool;
 
 typedef struct Player {
   bool  is_sorted;
